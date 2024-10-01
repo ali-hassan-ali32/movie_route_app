@@ -31,10 +31,10 @@ class _CarouseAddMovieBottomState extends State<CarouseAddMovieBottom> {
             setState(() {
               if (isAdded) {
                 watchListCubit.removeMovieFromWatchList(homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]);
-                log(watchListCubit.moviesWatchList.toString());
+                // log(watchListCubit.moviesWatchList.toString());
               } else {
                 watchListCubit.addMovieToWatchList(homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]);
-                log(watchListCubit.moviesWatchList.toString());
+                // log(watchListCubit.moviesWatchList.toString());
               }
             });
           },

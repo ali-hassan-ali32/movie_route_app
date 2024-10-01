@@ -44,6 +44,8 @@ dependencies:
   animate_do:
   salomon_bottom_bar:
   internet_connection_checker:
+  hive:
+  path_provider:
   sizer: ^3.0.0
 
 dev_dependencies:

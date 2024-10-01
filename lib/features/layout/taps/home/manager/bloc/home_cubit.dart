@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:movie_route_app/features/layout/taps/home/manager/cache_helper/cache_helper.dart';
 import 'package:toastification/toastification.dart';
 import '../../../../../../core/models/genres/movie_genres_model.dart';
 import '../../../../../../core/models/movie_details/movie_details_model.dart';
@@ -34,6 +35,17 @@ class HomeCubit extends Cubit<HomeState> {
   List<MoviesGenres> moviesGenres = [];
   List<UpcomingMovie> upcomingMovies = [];
   List<TopRatedMovie> topRatedMovies = [];
+  List<Movie> savedMovie=[];
+  Movie? movie;
+
+  void getFilms(){
+    CacheHelper.getMovies();
+    savedMovie=CacheHelper.movies;
+    print(savedMovie);
+    // print(savedMovie[0].id);
+    // emit(InitalHomeState());
+
+  }
 
   void resetData() {
     playCarouseSliderMovieAuto();

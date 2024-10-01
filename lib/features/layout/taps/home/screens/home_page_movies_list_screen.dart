@@ -95,7 +95,7 @@ class _HomeMoviesListScreenState extends State<HomeMoviesListScreen> {
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 120 / 200,
+                childAspectRatio: 120 / 220,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),

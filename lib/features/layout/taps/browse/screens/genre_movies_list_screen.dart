@@ -61,7 +61,7 @@ class _GenreMoviesListScreenState extends State<GenreMoviesListScreen> {
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 18.w / 120,
+                  childAspectRatio: 18.w / 130,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
