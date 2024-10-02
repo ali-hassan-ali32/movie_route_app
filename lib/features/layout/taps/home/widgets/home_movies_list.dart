@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/utils/classes.dart';
 import '../screens/home_page_movies_list_screen.dart';
 import 'home_movies_list_item.dart';
@@ -28,7 +29,7 @@ class HomeMoviesList extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => HomeMoviesListScreen(title: title, movies: movies),));
             },
             child: Text(
-              'View all',
+              'View All',
               style: TextStyle(
                   fontSize: 16.sp,
                   color: Theme.of(context).primaryColor
