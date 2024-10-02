@@ -1,16 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
 import 'package:sizer/sizer.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../../core/utils/classes.dart';
 import '../../../screens/movie_details_screen.dart';
 
-class MovieItem extends StatelessWidget {
+class MovieItem extends StatefulWidget {
   const MovieItem({super.key, required this.movie});
 
   final Movie? movie;
 
+
+  @override
+  State<MovieItem> createState() => _MovieItemState();
+}
+
+class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
+    WatchListCubit watchListCubit = WatchListCubit.get(context);
+    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
       decoration: BoxDecoration(
@@ -30,7 +41,7 @@ class MovieItem extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MovieDetailsPage(movie: movie),
+                builder: (context) => MovieDetailsPage(movie: widget.movie),
               ));
         },
         overlayColor: const MaterialStatePropertyAll(Colors.transparent),
@@ -45,8 +56,8 @@ class MovieItem extends StatelessWidget {
                     width: 29.sw,
                     height: 23.2.sh,
                     fit: BoxFit.cover,
-                    imageUrl: movie?.posterPath != null
-                        ? 'https://image.tmdb.org/t/p/w500/${movie!.posterPath}'
+                    imageUrl: widget.movie?.posterPath != null
+                        ? 'https://image.tmdb.org/t/p/w500/${widget.movie!.posterPath}'
                         : '',
                     errorWidget: (context, url, error) => Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -77,6 +88,43 @@ class MovieItem extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  GestureDetector(
+                      onTap: () {
+                        if (isAdded) {
+                          watchListCubit
+                              .removeMovieFromWatchList(widget.movie!);
+                          toastification.show(
+                            context: context,
+                            // optional if you use ToastificationWrapper
+                            title: Text('Film has been removed successfuly'),
+                            backgroundColor: Colors.orange,
+                            type: ToastificationType.success,
+                            // style:ToastificationStyle.fillColored,
+                            // animationDuration: Duration(seconds: 2),
+                            autoCloseDuration: const Duration(seconds: 2),
+                          );
+                        } else {
+                          watchListCubit.addMovieToWatchList(widget.movie!);
+                          toastification.show(
+                            context: context,
+                            // optional if you use ToastificationWrapper
+                            title: Text('Film has been added successfuly'),
+                            backgroundColor: Colors.orange,
+                            type: ToastificationType.success,
+                            // style:ToastificationStyle.fillColored,
+                            // animationDuration: Duration(seconds: 2),
+                            autoCloseDuration: const Duration(seconds: 2),
+                          );
+                        }
+                        setState(() {
+
+                        });
+                      },
+                      child: Image.asset(
+                        "assets/icons/bookmark.png",
+                        color: isAdded ? Colors.orange : Colors.white,
+                      ))
                 ],
               ),
             ),
@@ -88,7 +136,7 @@ class MovieItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie?.title ?? 'Unknown Title',
+                      widget.movie?.title ?? 'Unknown Title',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -99,7 +147,7 @@ class MovieItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      movie?.releaseDate ?? 'N/A',
+                      widget.movie?.releaseDate ?? 'N/A',
                       style: TextStyle(
                         fontSize: 16.sp,
                         color: Colors.grey,
@@ -111,7 +159,7 @@ class MovieItem extends StatelessWidget {
                         Icon(Icons.star, color: Colors.amber, size: 18.sp),
                         const SizedBox(width: 4),
                         Text(
-                          '${movie?.voteAverage ?? 'N/A'} / 10',
+                          '${widget.movie?.voteAverage ?? 'N/A'} / 10',
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 16.sp,
@@ -121,14 +169,13 @@ class MovieItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      movie?.overview ?? 'Overview Not Found',
+                      widget.movie?.overview ?? 'Overview Not Found',
                       maxLines: 3,
                       textAlign: TextAlign.justify,
                       style: TextStyle(
-                        fontSize: 16.sp,
-                        color: Colors.grey,
-                        overflow: TextOverflow.ellipsis
-                      ),
+                          fontSize: 16.sp,
+                          color: Colors.grey,
+                          overflow: TextOverflow.ellipsis),
                     )
                   ],
                 ),
