@@ -1,11 +1,13 @@
-import 'dart:developer';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/core/utils/constants.dart';
+import 'package:sizer/sizer.dart';
+
 import '../../../screens/movie_details_screen.dart';
 import '../manager/bloc/home_cubit.dart';
 import '../manager/bloc/home_state.dart';
 import 'CarouseSliderMovieAddBottom.dart';
-import 'package:sizer/sizer.dart';
 
 class CarouseSliderMovieDetails extends StatefulWidget {
   const CarouseSliderMovieDetails({
@@ -28,39 +30,65 @@ class _CarouseSliderMovieDetailsState extends State<CarouseSliderMovieDetails> {
             .genreIds ?? []
     );
 
-    for (var i in movieGenres) {
-      log(i ?? '');
-    }
-
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) => setState(() {}),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.5.h),
         child: Column(
           children: [
-            Text(
-              homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]
-                  .title ??
-                  'No Title',
-              maxLines: 1,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24.sp,
-                overflow: TextOverflow.ellipsis,
-              ),
+            AnimatedTextKit(
+              key: ValueKey(homeCubit
+                  .popularMovies[homeCubit.selectedCarouselSliderMovie].title),
+              animatedTexts: [
+                ColorizeAnimatedText(
+                  homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]
+                          .title ??
+                      'No Title',
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24.sp,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  colors: const [
+                    Color(0xFFF4A325),
+                    Color(0xFFF4931E),
+                    Color(0xFFF37C18),
+                    Color(0xFFF2690D),
+                    Color(0xFFF4B338), //
+                    Color(0xFFFFF9E3),
+                    Color(0xFFFFF1B6),
+                    Color(0xFFFFE886),
+                    Color(0xFFFFE05F),
+                    Color(0xFFFFD63F),
+                  ],
+                ),
+              ],
+              isRepeatingAnimation: false,
             ),
             SizedBox(
               height: 1.h,
             ),
-            Text(
-              movieGenres.isNotEmpty ? movieGenres.join(', ') : 'N/A',
-              maxLines: 1,
-              style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  color: Colors.grey,
-                  fontSize: 16.sp
-              ),
+            AnimatedTextKit(
+              key: ValueKey(movieGenres),
+              isRepeatingAnimation: false,
+              animatedTexts: [
+                ColorizeAnimatedText(
+                  movieGenres.isNotEmpty ? movieGenres.join(', ') : 'N/A',
+                  textStyle: TextStyle(fontSize: 16.sp),
+                  colors: const [
+                    Color(0xFFF4A325),
+                    Color(0xFFF4931E),
+                    Color(0xFFF37C18),
+                    Color(0xFFF2690D),
+                    Color(0xFFF4B338), //
+                    Color(0xFFFFF9E3),
+                    Color(0xFFFFF1B6),
+                    Color(0xFFFFE886),
+                    Color(0xFFFFE05F),
+                    Color(0xFFFFD63F),
+                  ],
+                ),
+              ],
             ),
             SizedBox(
               height: 1.5.h,
@@ -70,7 +98,7 @@ class _CarouseSliderMovieDetailsState extends State<CarouseSliderMovieDetails> {
               children: [
                 InkWell(
                   onTap: () {
-                    homeCubit.stopCarouseSliderMovieAuto();
+                    kCarouseSliderMovieAutoPlay = false;
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]),));
                   },
                   child: Column(
@@ -110,7 +138,9 @@ class _CarouseSliderMovieDetailsState extends State<CarouseSliderMovieDetails> {
                     ),
                   ),
                 ),
-                const CarouseAddMovieBottom(),
+                CarouseAddMovieBottom(
+                    movie: homeCubit
+                        .popularMovies[homeCubit.selectedCarouselSliderMovie]),
               ],
             ),
           ],

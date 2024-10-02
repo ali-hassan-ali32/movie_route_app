@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/core/utils/functions.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../core/utils/classes.dart';
@@ -27,8 +28,12 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
             setState(() {
               if (isAdded) {
                 watchListCubit.removeMovieFromWatchList(widget.movie!);
+                removeMovieToWatchListNotifcation(
+                    movieTitle: widget.movie?.title ?? 'No Title');
               } else {
                 watchListCubit.addMovieToWatchList(widget.movie!);
+                addMovieToWatchListNotifcation(
+                    movieTitle: widget.movie?.title ?? 'No title');
               }
             });
           },

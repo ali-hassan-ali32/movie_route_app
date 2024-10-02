@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_route_app/features/layout/taps/home/widgets/home_movie_add_bottom.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/utils/classes.dart';
 import '../../../screens/movie_details_screen.dart';
 
@@ -8,6 +10,7 @@ class HomeMoviesListItem extends StatelessWidget {
   const HomeMoviesListItem({super.key, required this.movie});
 
   final Movie? movie;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,7 +55,7 @@ class HomeMoviesListItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Theme.of(context).primaryColor.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
                           // Colors.black.withOpacity(0.6),
                           Colors.transparent,
                         ],
@@ -61,6 +64,7 @@ class HomeMoviesListItem extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(left: -5, child: HomeMovieAddBottom(movie: movie)),
                 ],
               ),
             ),

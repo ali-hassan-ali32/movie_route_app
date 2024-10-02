@@ -1,39 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../../../../../core/models/genres/movie_genres_model.dart';
 import '../../../../../../core/models/movie_details/movie_details_model.dart';
 import '../../../../../../core/models/popular_movies/popular_movies_model.dart';
 import '../../../../../../core/models/top_rated/top_rated_movies_model.dart';
 import '../../../../../../core/models/upcoming_movies/upcoming_movies_model.dart';
 import '../../../../../../core/utils/classes.dart';
+import '../../../../../../core/utils/constants.dart';
 import '../../../../../../data/manager/movie_genres_api.dart';
 import '../../../../../../data/manager/popular_movies_api.dart';
 import '../../../../../../data/manager/top_rated_movies_api.dart';
 import '../../../../../../data/manager/upcoming_movies_api.dart';
-import '../../../../../../main.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(): super(InitalHomeState());
   static HomeCubit get(context) => BlocProvider.of(context);
 
-
-
+  int selectedTap = 0;
   int selectedMovieDetailsTap = 0;
   int selectedCarouselSliderMovie = 0;
+
   bool carouseSliderMovieAutoPlay = true;
 
   MovieDetailsModel? currentMovie;
-
   MoviesStack moviesStack = MoviesStack();
 
-  // List<num> moviesWatchListIds = [];
+  List<Color?> carousSliderMoviesColors = [];
   List<PopularMovie> popularMovies = [];
   List<MoviesGenres> moviesGenres = [];
   List<UpcomingMovie> upcomingMovies = [];
   List<TopRatedMovie> topRatedMovies = [];
+
+  Future<List<Color?>> extractColorsFromImages(
+      {required List<String> imageUrls}) async {
+    List<Color?> colors = [];
+
+    for (String url in imageUrls) {
+      try {
+        // Generate the palette from the image URL
+        final PaletteGenerator paletteGenerator =
+            await PaletteGenerator.fromImageProvider(
+          NetworkImage(url),
+        );
+        // Add the dominant color to the list
+        colors.add(paletteGenerator.dominantColor?.color);
+      } catch (e) {
+        // Handle any errors (e.g., network issues, invalid URLs)
+        colors.add(null); // Add null if there's an error
+      }
+    }
+
+    return colors;
+  }
 
   void resetData() {
     playCarouseSliderMovieAuto();
@@ -57,7 +80,6 @@ class HomeCubit extends Cubit<HomeState> {
             color: Colors.white
         ),
       ),
-      // you can also use RichText widget for title and description parameters
       description: const Text('This Feacture is Not Available Yet',style: TextStyle(color: Colors.white),),
       alignment: Alignment.topRight,
       direction: TextDirection.ltr,
@@ -69,7 +91,7 @@ class HomeCubit extends Cubit<HomeState> {
         );
       },
       icon: const Icon(Icons.warning,color: Colors.white,),
-      primaryColor: customOrange,
+      primaryColor: kPrimalyColor,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       borderRadius: BorderRadius.circular(12),
@@ -101,7 +123,6 @@ class HomeCubit extends Cubit<HomeState> {
             color: Colors.white
         ),
       ),
-      // you can also use RichText widget for title and description parameters
       description: const Text('Please Check Internet Connection',style: TextStyle(color: Colors.white),),
       alignment: Alignment.topRight,
       direction: TextDirection.ltr,
@@ -132,6 +153,16 @@ class HomeCubit extends Cubit<HomeState> {
       showProgressBar: false,
       applyBlurEffect: true,
     );
+  }
+
+  void onTapPress(value) {
+    selectedTap = value;
+    if (value == 0) {
+      kCarouseSliderMovieAutoPlay = true;
+    } else {
+      kCarouseSliderMovieAutoPlay = false;
+    }
+    emit(InitalHomeState());
   }
 
   void movieDetailsFailureNotifcation() {
@@ -200,7 +231,7 @@ class HomeCubit extends Cubit<HomeState> {
 
       // Check if the list is empty
       if (upcomingMovies.isEmpty) {
-        failureNotifcation();  // Notify the user of empty data
+        failureNotifcation();
         emit(GetHomeMoviesDataError());  // Emit error state
       } else {
         emit(GetHomeMoviesDataSuccses());  // Emit success state with data
@@ -211,6 +242,14 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  List<String> getPosterPath({required List<Movie> movies}) {
+    List<String> fullPosterPath = [];
+
+    for (var movie in movies) {
+      fullPosterPath.add('https://image.tmdb.org/t/p/w500/${movie.posterPath}');
+    }
+    return fullPosterPath;
+  }
 
   Future<void> getHomePageMoviesData() async {
     resetData();
@@ -222,11 +261,12 @@ class HomeCubit extends Cubit<HomeState> {
       }
       PopularMoviesModel popularMoviesModel = await PopularMoviesApi.getPopularMovies();
       popularMovies = popularMoviesModel.popularMoviesList ?? [];
+      carousSliderMoviesColors = await extractColorsFromImages(
+          imageUrls: getPosterPath(movies: popularMovies));
 
       MoviesGenresModel moviesGenresModel = await MoviesGenresApi.getMoviesGenres();
       moviesGenres = moviesGenresModel.genres ?? [];
 
-      //   Here the list
       UpcomingMoviesModel upcomingMoviesModel = await UpcomingMoviesApi.getUpcomingMovies();
       upcomingMovies = upcomingMoviesModel.upcomingMoviesList ?? [];
 
@@ -245,35 +285,6 @@ class HomeCubit extends Cubit<HomeState> {
       emit(GetHomeMoviesDataError());
     }
   }
-
-  // Future<void> getHomePageMoviesData() async {
-  //   resetData();
-  //   emit(GetHomeMoviesDataLoading());
-  //
-  //   try {
-  //     bool isConnected = await InternetConnectionChecker().hasConnection;
-  //     if (!isConnected) {
-  //       emit(GetHomeMoviesDataError());
-  //       return; // Exit if no connection
-  //     }
-  //
-  //     // Fetch only upcoming movies
-  //     UpcomingMoviesModel upcomingMoviesModel = await UpcomingMoviesApi.getUpcomingMovies();
-  //     upcomingMovies = upcomingMoviesModel.upcomingMoviesList ?? [];
-  //
-  //     // Check if the list is empty
-  //     if (upcomingMovies.isEmpty) {
-  //       failureNotifcation();
-  //       emit(GetHomeMoviesDataError());
-  //     } else {
-  //       emit(GetHomeMoviesDataSuccses()); // You can pass upcomingMovies here if needed
-  //     }
-  //   } catch (e) {
-  //     failureNotifcation();
-  //     emit(GetHomeMoviesDataError());
-  //   }
-  // }
-
 
   List<String> getMovieGenres({required List<num> genresIds}) {
     List<String> genres = genresIds.map((id) {

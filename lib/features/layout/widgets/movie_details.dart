@@ -2,10 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../core/utils/classes.dart';
+import '../../../core/utils/constants.dart';
 import '../../../core/utils/functions.dart';
-import '../../../main.dart';
-import '../bloc/movie_cubit.dart';
+import '../bloc/movie_details_cubit.dart';
 import '../bloc/movie_details_states.dart';
 import '../taps/search/widgets/movie_search_item.dart';
 import 'add_movie_bottom.dart';
@@ -55,7 +56,7 @@ class MovieDetails extends StatelessWidget {
               },
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: customOrange,
+                color: kPrimalyColor,
                 size: 22.sp,
               ),
             ),
@@ -114,14 +115,14 @@ class MovieDetails extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.star,
-                                color: customOrange,
+                                color: kPrimalyColor,
                                 size: 18.sp,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 '${movieDetailsCubit.currentMovie?.voteAverage ?? 'N/A'} / 10',
                                 style: TextStyle(
-                                  color: customOrange,
+                                  color: kPrimalyColor,
                                   fontSize: 16.sp,
                                 ),
                               ),

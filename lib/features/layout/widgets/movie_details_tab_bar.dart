@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../bloc/movie_cubit.dart';
+import '../bloc/movie_details_cubit.dart';
 
 class MovieDetailsTabBar extends StatefulWidget {
   final MovieDetailsCubit movieDetailsCubit;

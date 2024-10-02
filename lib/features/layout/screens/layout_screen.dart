@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/features/layout/taps/home/manager/bloc/home_cubit.dart';
+import 'package:movie_route_app/features/layout/taps/home/manager/bloc/home_state.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+import '../../../core/utils/constants.dart';
 import '../../../core/utils/widgets/custom_bg.dart';
-import '../../../main.dart';
 import '../taps/browse/screens/browse_screen.dart';
+import '../taps/home/manager/cache/cache_helper.dart';
 import '../taps/home/screens/home_screen.dart';
 import '../taps/search/screens/search_screen.dart';
 import '../taps/watchlist/watchlist_screen.dart';
@@ -17,68 +22,62 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
-
-  int selectedTap = 0;
   @override
   Widget build(BuildContext context) {
-
     return CustomBackground(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: SalomonBottomBar(
-          currentIndex: selectedTap,
-          onTap: (value) {
-            setState(() {
-              selectedTap = value;
-            });
-          },
-          items: [
-
-            /// Home
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text("Home"),
-              selectedColor: customOrange,
-              unselectedColor: Colors.grey,
-            ),
-
-            /// Search
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.search),
-              title: const Text("Search"),
-              selectedColor: customOrange,
-              unselectedColor: Colors.grey,
-            ),
-
-            /// Browse
-            SalomonBottomBarItem(
-              icon: const ImageIcon(
-                  AssetImage("assets/icons/movie_icon.png")),
-              title: const Text("Browse"),
-              selectedColor: customOrange,
-              unselectedColor: Colors.grey,
-            ),
-
-            /// WatchList
-            SalomonBottomBarItem(
-              icon: const ImageIcon(
-                  AssetImage("assets/icons/Icon ionic-md-bookmarks.png")),
-              title: const Text("WatchList"),
-              selectedColor: customOrange,
-              unselectedColor: Colors.grey,
-            ),
-          ],
+      child: BlocListener<HomeCubit, HomeState>(
+        listenWhen: (previous, current) => current is InitalHomeState,
+        listener: (context, state) {
+          setState(() {});
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: SalomonBottomBar(
+            currentIndex: HomeCubit.get(context).selectedTap,
+            onTap: (value) {
+              HomeCubit.get(context).onTapPress(value);
+              CacheHelper.getMovies();
+            },
+            items: [
+              SalomonBottomBarItem(
+                icon: const Icon(Icons.home),
+                title: const Text("Home"),
+                selectedColor: kPrimalyColor,
+                unselectedColor: Colors.grey,
+              ),
+              SalomonBottomBarItem(
+                icon: const Icon(Icons.search),
+                title: const Text("Search"),
+                selectedColor: kPrimalyColor,
+                unselectedColor: Colors.grey,
+              ),
+              SalomonBottomBarItem(
+                icon:
+                    const ImageIcon(AssetImage("assets/icons/movie_icon.png")),
+                title: const Text("Browse"),
+                selectedColor: kPrimalyColor,
+                unselectedColor: Colors.grey,
+              ),
+              SalomonBottomBarItem(
+                icon: const ImageIcon(
+                    AssetImage("assets/icons/Icon ionic-md-bookmarks.png")),
+                title: const Text("WatchList"),
+                selectedColor: kPrimalyColor,
+                unselectedColor: Colors.grey,
+              ),
+            ],
+          ),
+          body: screens[HomeCubit.get(context).selectedTap],
         ),
-        body: screens[selectedTap],
       ),
     );
   }
 
-  List<Widget> screens = const [
-    HomeScreen(),
-    SearchScreen(),
-    BrowseScreen(),
-    WatchListScreen(),
+  List<Widget> screens = [
+    const HomeScreen(),
+    const SearchScreen(),
+    const BrowseScreen(),
+    const WatchListScreen(),
   ];
 }

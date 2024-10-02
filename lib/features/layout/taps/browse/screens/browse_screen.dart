@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../../main.dart';
+
+import '../../../../../core/utils/constants.dart';
 import '../../../widgets/custom_loading_widget.dart';
 import '../manager/bloc/browse_cubit.dart';
 import '../manager/bloc/browse_states.dart';
@@ -44,7 +45,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
               children: [
                 Icon(
                   Icons.do_not_disturb_alt_rounded,
-                  color: customOrange,
+                  color: kPrimalyColor,
                   size: 40.sp,
                 ),
                 const SizedBox(
