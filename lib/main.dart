@@ -10,6 +10,7 @@ import 'features/splash/splash_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiBlocProvider(
     providers: [
       // BlocProvider(create: (context) => MovieCubit(),),

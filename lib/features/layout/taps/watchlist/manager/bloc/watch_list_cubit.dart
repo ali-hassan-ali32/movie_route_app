@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_route_app/features/layout/taps/home/manager/cache_helper/cache_helper.dart';
@@ -12,36 +11,88 @@ class WatchListCubit extends Cubit<WatchListState> {
 
 
   List<Movie> moviesWatchList = [];
+  @override
+  bool isClosed = false;
   List<Movie> savedMoviesWatchList = [];
 
-  bool addMovieToWatchList(Movie movie) {
-    if (!isMovieAdded(movie)) {
-      // emit(InitalWatchListState());
-      moviesWatchList.add(movie);
-      CacheHelper.saveFilms(movie);
-      print(CacheHelper.saveFilms(movie));
-      print(moviesWatchList.length);
-      return true;
-    }
-    return false;
+  void addMovieToWatchList(Movie movie) {
+    Future.delayed(Duration(milliseconds: 500),(){
+      emit(AddMovieLoadingState());
+      if (!isMovieAdded(movie)) {
+
+        moviesWatchList.add(movie);
+        CacheHelper.saveFilms(moviesWatchList);
+        emit(AddMovieSuccesState());
+        print(moviesWatchList.length);
+        print(savedMoviesWatchList.length);
+        return true;
+      }
+      return false;
+    });
+  }
+  @override
+  Future<void> close() {
+    isClosed = true; // Set the flag to true on close
+    return super.close();
   }
 
 
-  Future<void> getSavedMovies()async{
-    savedMoviesWatchList=await CacheHelper.getMovies();
-    print(savedMoviesWatchList);
-    print(savedMoviesWatchList.length);
+  Future<void> getSavedMovies() async {
+    Future.delayed(Duration( milliseconds: 500),() async{
+      emit(WatchListRemoveLoadingState());
+      try {
+        savedMoviesWatchList = await CacheHelper.getMovies();
+        print(savedMoviesWatchList.length);
 
+        // CacheHelper.saveFilms(savedMoviesWatchList);
+        if (!isClosed) {
+          emit(WatchListRemoveSuccesState());
+        }
+      } catch (e) {
+        emit(GetWatchListErrorState());
+        rethrow;
+      }
+    });
+  }
+  void deleteSavedMovie(Movie movie) async {
+    await CacheHelper.deleteMovie(movie.title ?? "");
+
+    // Check if the BLoC is closed before emitting a new state
+    if (!isClosed) { // Make sure to add an `isClosed` flag to check the status of the BLoC
+      // emit(WatchListDeleteState());
+    }
   }
 
 
   bool isMovieAdded(Movie movie) {
     return moviesWatchList.contains(movie);
+
   }
 
-  void removeMovieFromWatchList(Movie movie) {
+  bool isMovieSaved(Movie? movie) {
+    return savedMoviesWatchList.contains(movie);
+  }
+
+  void removeMovieFromWatchList(Movie? movie) {
     // emit(WatchListRemoveLoadingState());
     moviesWatchList.remove(movie);
+    // emit(WatchListDeleteState());
+
+    // emit(WatchListRemoveSuccesState());
+    // emit(WatchListRemoveState());
+  }void removeMovieFromSavedWatchList(Movie? movie) {
+    // emit(WatchListRemoveLoadingState());
+    Future.delayed(Duration(milliseconds: 500),()async{
+      emit(WatchListDeleteLoadingState());
+
+     // await CacheHelper.deleteMovie(movie?.title??"");
+
+       savedMoviesWatchList.remove(movie);
+       print(savedMoviesWatchList.length);
+      emit(WatchListDeleteSuccesState());
+    });
+    // emit(WatchListDeleteState());
+
     // emit(WatchListRemoveSuccesState());
     // emit(WatchListRemoveState());
   }

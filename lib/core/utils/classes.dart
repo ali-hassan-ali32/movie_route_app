@@ -16,13 +16,28 @@ class Movie {
   num? voteAverage;
   num? voteCount;
 
-  Movie({this.adult, this.backdropPath, this.genreIds, this.id, this.originalLanguage, this.originalTitle, this.overview, this.popularity, this.posterPath, this.releaseDate, this.title, this.video, this.voteAverage, this.voteCount});
+  Movie(
+      {this.adult,
+      this.backdropPath,
+      this.genreIds,
+      this.id,
+      this.originalLanguage,
+      this.originalTitle,
+      this.overview,
+      this.popularity,
+      this.posterPath,
+      this.releaseDate,
+      this.title,
+      this.video,
+      this.voteAverage,
+      this.voteCount});
 
   factory Movie.fromJson(dynamic json) {
     return Movie(
       adult: json['adult'],
       backdropPath: json['backdrop_path'],
-      genreIds: json['genre_ids'] == null ? null : json['genre_ids'].cast<num>(),
+      genreIds:
+          json['genre_ids']?.cast<num>(),
       id: json['id'],
       originalLanguage: json['original_language'],
       originalTitle: json['original_title'],
@@ -87,7 +102,7 @@ class MoviesStack {
   }
 
   void clear() {
-    while(movies.isNotEmpty) {
+    while (movies.isNotEmpty) {
       pop();
     }
   }

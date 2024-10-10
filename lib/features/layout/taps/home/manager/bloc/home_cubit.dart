@@ -40,7 +40,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   void getFilms(){
     CacheHelper.getMovies();
-    savedMovie=CacheHelper.movies;
     print(savedMovie);
     // print(savedMovie[0].id);
     // emit(InitalHomeState());

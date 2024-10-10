@@ -11,7 +11,6 @@ class MovieItem extends StatefulWidget {
 
   final Movie? movie;
 
-
   @override
   State<MovieItem> createState() => _MovieItemState();
 }
@@ -20,7 +19,8 @@ class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
     WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
+    // bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
+    bool isInSaved = watchListCubit.isMovieSaved(widget.movie!);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
@@ -44,7 +44,7 @@ class _MovieItemState extends State<MovieItem> {
                 builder: (context) => MovieDetailsPage(movie: widget.movie),
               ));
         },
-        overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -88,16 +88,22 @@ class _MovieItemState extends State<MovieItem> {
                       ),
                     ),
                   ),
-
                   GestureDetector(
                       onTap: () {
-                        if (isAdded) {
-                          watchListCubit
-                              .removeMovieFromWatchList(widget.movie!);
+                        if (isInSaved) {
+                          watchListCubit.deleteSavedMovie(widget.movie!);
+                          watchListCubit.removeMovieFromSavedWatchList(widget.movie);
+                          watchListCubit.removeMovieFromWatchList(widget.movie);
+                          // watchListCubit
+                          //     .removeMovieFromWatchList(widget.movie!);
+                          // watchListCubit.deleteSavedMovie(widget.movie!);
+
+
+                          // watchListCubit.removeMovieFromSavedWatchList(widget.movie!);
                           toastification.show(
                             context: context,
                             // optional if you use ToastificationWrapper
-                            title: Text('Film has been removed successfuly'),
+                            title: const Text('Film has been removed successfuly'),
                             backgroundColor: Colors.orange,
                             type: ToastificationType.success,
                             // style:ToastificationStyle.fillColored,
@@ -109,7 +115,7 @@ class _MovieItemState extends State<MovieItem> {
                           toastification.show(
                             context: context,
                             // optional if you use ToastificationWrapper
-                            title: Text('Film has been added successfuly'),
+                            title: const Text('Film has been added successfuly'),
                             backgroundColor: Colors.orange,
                             type: ToastificationType.success,
                             // style:ToastificationStyle.fillColored,
@@ -117,13 +123,13 @@ class _MovieItemState extends State<MovieItem> {
                             autoCloseDuration: const Duration(seconds: 2),
                           );
                         }
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       child: Image.asset(
                         "assets/icons/bookmark.png",
-                        color: isAdded ? Colors.orange : Colors.white,
+                        color: isInSaved
+                            ? Colors.orange
+                            : Colors.white,
                       ))
                 ],
               ),

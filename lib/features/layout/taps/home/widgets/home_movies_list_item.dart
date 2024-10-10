@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_route_app/features/layout/taps/home/manager/cache_helper/cache_helper.dart';
 import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
 import 'package:sizer/sizer.dart';
 import 'package:toastification/toastification.dart';
@@ -20,7 +19,7 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
   @override
   Widget build(BuildContext context) {
     WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
+    bool isInSaved = watchListCubit.isMovieSaved(widget.movie!);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: .5.h),
@@ -79,13 +78,20 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        if (isAdded) {
-                          watchListCubit
-                              .removeMovieFromWatchList(widget.movie!);
+                        if (isInSaved) {
+                          watchListCubit.deleteSavedMovie(widget.movie!);
+                          watchListCubit.removeMovieFromSavedWatchList(widget.movie);
+                          watchListCubit.removeMovieFromWatchList(widget.movie);
+                          // watchListCubit
+                          //     .removeMovieFromWatchList(widget.movie!);
+                          // watchListCubit.deleteSavedMovie(widget.movie!);
+
+
+                          // watchListCubit.removeMovieFromSavedWatchList(widget.movie!);
                           toastification.show(
                             context: context,
                             // optional if you use ToastificationWrapper
-                            title: Text('Film has been removed successfuly'),
+                            title: const Text('Film has been removed successfuly'),
                             backgroundColor: Colors.orange,
                             type: ToastificationType.success,
                             // style:ToastificationStyle.fillColored,
@@ -93,11 +99,12 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                             autoCloseDuration: const Duration(seconds: 2),
                           );
                         } else {
+                          isInSaved=true;
                           watchListCubit.addMovieToWatchList(widget.movie!);
                           toastification.show(
                             context: context,
                             // optional if you use ToastificationWrapper
-                            title: Text('Film has been added successfuly'),
+                            title: const Text('Film has been added successfuly'),
                             backgroundColor: Colors.orange,
                             type: ToastificationType.success,
                             // style:ToastificationStyle.fillColored,
@@ -105,13 +112,13 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                             autoCloseDuration: const Duration(seconds: 2),
                           );
                         }
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       child: Image.asset(
                         "assets/icons/bookmark.png",
-                        color: isAdded ? Colors.orange : Colors.white,
+                        color: isInSaved
+                            ? Colors.orange
+                            : Colors.white,
                       ))
                 ],
               ),

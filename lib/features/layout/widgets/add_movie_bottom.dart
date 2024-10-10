@@ -19,28 +19,39 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
   @override
   Widget build(BuildContext context) {
     WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
+    bool isInSaved = watchListCubit.isMovieSaved(widget.movie!);
 
     return BlocListener<WatchListCubit, WatchListState>(
         listener: (context, state) {},
         child: ElevatedButton(
           onPressed: () {
             setState(() {
-              if (isAdded) {
-                watchListCubit.removeMovieFromWatchList(widget.movie!);
+              if (isInSaved) {
+                watchListCubit.deleteSavedMovie(widget.movie!);
+                watchListCubit.removeMovieFromSavedWatchList(widget.movie);
+                watchListCubit.removeMovieFromWatchList(widget.movie);
+                // watchListCubit
+                //     .removeMovieFromWatchList(widget.movie!);
+                // watchListCubit.deleteSavedMovie(widget.movie!);
+
+
+                // watchListCubit.removeMovieFromSavedWatchList(widget.movie!);
                 toastification.show(
-                    context: context,
-                    // optional if you use ToastificationWrapper
-                    title: Text('Film has been removed successfuly'),
-              backgroundColor: Colors.orange,
-              type: ToastificationType.success,
-              autoCloseDuration: const Duration(seconds: 2),);
+                  context: context,
+                  // optional if you use ToastificationWrapper
+                  title: const Text('Film has been removed successfuly'),
+                  backgroundColor: Colors.orange,
+                  type: ToastificationType.success,
+                  // style:ToastificationStyle.fillColored,
+                  // animationDuration: Duration(seconds: 2),
+                  autoCloseDuration: const Duration(seconds: 2),
+                );
               } else {
                 watchListCubit.addMovieToWatchList(widget.movie!);
                 toastification.show(
                   context: context,
                   // optional if you use ToastificationWrapper
-                  title: Text('Film has been added successfuly'),
+                  title: const Text('Film has been added successfuly'),
                   backgroundColor: Colors.orange,
                   type: ToastificationType.success,
                   // style:ToastificationStyle.fillColored,
@@ -53,11 +64,11 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
           style: ElevatedButton.styleFrom(
             splashFactory: NoSplash.splashFactory,
             backgroundColor:
-                isAdded ? Theme.of(context).primaryColor : Colors.transparent,
+                isInSaved ? Theme.of(context).primaryColor : Colors.transparent,
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 2,
-                color: isAdded
+                color: isInSaved
                     ? Theme.of(context).primaryColor
                     : Colors.grey.withOpacity(0.5),
               ),
@@ -69,17 +80,17 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isAdded ? 'Remove' : 'Add',
+                isInSaved ? 'Remove' : 'Add',
                 style: TextStyle(
                   fontSize: 18.sp,
-                  color: isAdded ? Colors.black : Colors.white,
+                  color: isInSaved ? Colors.black : Colors.white,
                 ),
               ),
               const SizedBox(width: 10),
               Icon(
                 Icons.bookmark,
                 size: 20.sp,
-                color: isAdded ? Colors.black : Colors.white,
+                color: isInSaved ? Colors.black : Colors.white,
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_states.dart';
 import '../../../screens/movie_details_screen.dart';
 import '../../../widgets/custom_loading_widget.dart';
 import '../manager/bloc/home_cubit.dart';
@@ -20,7 +21,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeCubit homeCubit = HomeCubit.get(context);
 
-    return BlocBuilder<HomeCubit, HomeState>(
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+
+      },
       builder: (context, state) {
         if (state is GetHomeMoviesDataLoading) {
           return const CustomLoadingWidget();

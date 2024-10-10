@@ -28,9 +28,7 @@ class _CarouseSliderMovieDetailsState extends State<CarouseSliderMovieDetails> {
             .genreIds ?? []
     );
 
-    for (var i in movieGenres) {
-      log(i ?? '');
-    }
+
 
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) => setState(() {}),

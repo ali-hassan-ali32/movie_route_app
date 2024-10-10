@@ -69,21 +69,35 @@ class SimilarMovie extends Movie{
     voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
   }
+  @override
   bool? adult;
   // dynamic backdropPath;
+  @override
   List<num>? genreIds;
+  @override
   num? id;
+  @override
   String? originalLanguage;
+  @override
   String? originalTitle;
+  @override
   String? overview;
+  @override
   num? popularity;
+  @override
   String? posterPath;
+  @override
   String? releaseDate;
+  @override
   String? title;
+  @override
   bool? video;
+  @override
   num? voteAverage;
+  @override
   num? voteCount;
 
+  @override
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['adult'] = adult;
