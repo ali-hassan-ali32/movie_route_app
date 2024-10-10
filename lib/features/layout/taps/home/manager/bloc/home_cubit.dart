@@ -38,6 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
   List<Movie> savedMovie=[];
   Movie? movie;
 
+int selectedTap=0;
   void getFilms(){
     CacheHelper.getMovies();
     print(savedMovie);
@@ -312,5 +313,9 @@ class HomeCubit extends Cubit<HomeState> {
   void onMovieDetailsTapPress(value) {
     selectedMovieDetailsTap = value;
     emit(InitalHomeState());
+  }
+
+  void onTapPress(int value) {
+    selectedTap=value;
   }
 }

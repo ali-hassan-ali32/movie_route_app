@@ -108,7 +108,8 @@ class _CarouseSliderMovieDetailsState extends State<CarouseSliderMovieDetails> {
                     ),
                   ),
                 ),
-                const CarouseAddMovieBottom(),
+                CarouseAddMovieBottom(movie: homeCubit
+                    .popularMovies[homeCubit.selectedCarouselSliderMovie],),
               ],
             ),
           ],

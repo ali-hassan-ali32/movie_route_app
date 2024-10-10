@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toastification/toastification.dart';
-import 'features/layout/bloc/movie_cubit.dart';
+import 'features/layout/bloc/movie_details_cubit.dart';
 import 'features/layout/screens/layout_screen.dart';
 import 'features/layout/taps/browse/manager/bloc/browse_cubit.dart';
 import 'features/layout/taps/home/manager/bloc/home_cubit.dart';
