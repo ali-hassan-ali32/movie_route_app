@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/models/genres/movie_genres_model.dart';
-import '../../../../../main.dart';
+import '../../../../../core/utils/constants.dart';
 import '../screens/genre_movies_list_screen.dart';
 
 class GenreMovieItem extends StatelessWidget {
@@ -35,9 +36,9 @@ class GenreMovieItem extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                        customOrange,
-                        customOrange.shade900,
-                      ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
+                    kPrimalyColor,
+                    kPrimalyColor.shade900,
+                  ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
                 ),
                 ElevatedButton(
                     onPressed: () {

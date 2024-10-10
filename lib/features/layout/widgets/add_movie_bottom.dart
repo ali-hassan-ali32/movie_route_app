@@ -8,7 +8,7 @@ import '../taps/watchlist/manager/bloc/watch_list_cubit.dart';
 import '../taps/watchlist/manager/bloc/watch_list_states.dart';
 
 class CustomAddBottom extends StatefulWidget {
-  const CustomAddBottom({super.key, required this.movie});
+   CustomAddBottom({super.key, required this.movie});
 
   final Movie? movie;
   @override
@@ -19,39 +19,28 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
   @override
   Widget build(BuildContext context) {
     WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isInSaved = watchListCubit.isMovieSaved(widget.movie!);
+    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
 
     return BlocListener<WatchListCubit, WatchListState>(
         listener: (context, state) {},
         child: ElevatedButton(
           onPressed: () {
             setState(() {
-              if (isInSaved) {
-                watchListCubit.deleteSavedMovie(widget.movie!);
-                watchListCubit.removeMovieFromSavedWatchList(widget.movie);
-                watchListCubit.removeMovieFromWatchList(widget.movie);
-                // watchListCubit
-                //     .removeMovieFromWatchList(widget.movie!);
-                // watchListCubit.deleteSavedMovie(widget.movie!);
-
-
-                // watchListCubit.removeMovieFromSavedWatchList(widget.movie!);
+              if (isAdded) {
+                watchListCubit.removeMovieFromWatchList(widget.movie!);
                 toastification.show(
-                  context: context,
-                  // optional if you use ToastificationWrapper
-                  title: const Text('Film has been removed successfuly'),
-                  backgroundColor: Colors.orange,
-                  type: ToastificationType.success,
-                  // style:ToastificationStyle.fillColored,
-                  // animationDuration: Duration(seconds: 2),
-                  autoCloseDuration: const Duration(seconds: 2),
-                );
+                    context: context,
+                    // optional if you use ToastificationWrapper
+                    title: Text('Film has been removed successfuly'),
+              backgroundColor: Colors.orange,
+              type: ToastificationType.success,
+              autoCloseDuration: const Duration(seconds: 2),);
               } else {
                 watchListCubit.addMovieToWatchList(widget.movie!);
                 toastification.show(
                   context: context,
                   // optional if you use ToastificationWrapper
-                  title: const Text('Film has been added successfuly'),
+                  title: Text('Film has been added successfuly'),
                   backgroundColor: Colors.orange,
                   type: ToastificationType.success,
                   // style:ToastificationStyle.fillColored,
@@ -64,11 +53,11 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
           style: ElevatedButton.styleFrom(
             splashFactory: NoSplash.splashFactory,
             backgroundColor:
-                isInSaved ? Theme.of(context).primaryColor : Colors.transparent,
+                isAdded ? Theme.of(context).primaryColor : Colors.transparent,
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 2,
-                color: isInSaved
+                color: isAdded
                     ? Theme.of(context).primaryColor
                     : Colors.grey.withOpacity(0.5),
               ),
@@ -80,17 +69,17 @@ class _CustomAddBottomState extends State<CustomAddBottom> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isInSaved ? 'Remove' : 'Add',
+                isAdded ? 'Remove' : 'Add',
                 style: TextStyle(
                   fontSize: 18.sp,
-                  color: isInSaved ? Colors.black : Colors.white,
+                  color: isAdded ? Colors.black : Colors.white,
                 ),
               ),
               const SizedBox(width: 10),
               Icon(
                 Icons.bookmark,
                 size: 20.sp,
-                color: isInSaved ? Colors.black : Colors.white,
+                color: isAdded ? Colors.black : Colors.white,
               ),
             ],
           ),

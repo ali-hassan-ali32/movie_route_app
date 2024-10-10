@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../../main.dart';
+
+import '../../../../../core/utils/constants.dart';
 import '../../../widgets/custom_loading_widget.dart';
 import '../../home/widgets/home_movies_list_item.dart';
 import '../manager/bloc/browse_cubit.dart';
@@ -29,8 +30,6 @@ class _GenreMoviesListScreenState extends State<GenreMoviesListScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    // BrowseCubit browseCubit = BrowseCubit.get(context);
-
     return Scaffold(
         backgroundColor: const Color(0xff121312),
         appBar: AppBar(
@@ -78,7 +77,7 @@ class _GenreMoviesListScreenState extends State<GenreMoviesListScreen> {
                   children: [
                     Icon(
                       Icons.do_not_disturb_alt_rounded,
-                      color: customOrange,
+                      color: kPrimalyColor,
                       size: 40.sp,
                     ),
                     const SizedBox(

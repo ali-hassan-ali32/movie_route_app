@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/core/utils/classes.dart';
+import 'package:movie_route_app/core/utils/functions.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../watchlist/manager/bloc/watch_list_cubit.dart';
 import '../../watchlist/manager/bloc/watch_list_states.dart';
-import '../manager/bloc/home_cubit.dart';
 
 class CarouseAddMovieBottom extends StatefulWidget {
-  const CarouseAddMovieBottom({super.key});
+  const CarouseAddMovieBottom({super.key, required this.movie});
 
+  final Movie? movie;
   @override
   State<CarouseAddMovieBottom> createState() => _CarouseAddMovieBottomState();
 }
@@ -16,10 +18,8 @@ class CarouseAddMovieBottom extends StatefulWidget {
 class _CarouseAddMovieBottomState extends State<CarouseAddMovieBottom> {
   @override
   Widget build(BuildContext context) {
-    HomeCubit homeCubit = HomeCubit.get(context);
     WatchListCubit watchListCubit = WatchListCubit.get(context);
-
-    bool isAdded = watchListCubit.isMovieAdded(homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]);
+    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
 
     return BlocListener<WatchListCubit, WatchListState>(
         listener: (context, state) {
@@ -29,11 +29,13 @@ class _CarouseAddMovieBottomState extends State<CarouseAddMovieBottom> {
           onTap: () {
             setState(() {
               if (isAdded) {
-                watchListCubit.removeMovieFromWatchList(homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]);
-                // log(watchListCubit.moviesWatchList.toString());
+                watchListCubit.removeMovieFromWatchList(widget.movie!);
+                removeMovieToWatchListNotifcation(
+                    movieTitle: widget.movie?.title ?? 'No Title');
               } else {
-                watchListCubit.addMovieToWatchList(homeCubit.popularMovies[homeCubit.selectedCarouselSliderMovie]);
-                // log(watchListCubit.moviesWatchList.toString());
+                watchListCubit.addMovieToWatchList(widget.movie!);
+                addMovieToWatchListNotifcation(
+                    movieTitle: widget.movie?.title ?? 'No Title');
               }
             });
           },
@@ -51,8 +53,10 @@ class _CarouseAddMovieBottomState extends State<CarouseAddMovieBottom> {
               Text(
                 'Add',
                 style: TextStyle(
-                  color: isAdded ? Theme.of(context).primaryColor : Colors.white,
-                  fontSize: 16.sp
+                    color: watchListCubit.isMovieAdded(widget.movie!)
+                        ? Theme.of(context).primaryColor
+                        : Colors.white,
+                    fontSize: 16.sp
                 ),
               ),
             ],

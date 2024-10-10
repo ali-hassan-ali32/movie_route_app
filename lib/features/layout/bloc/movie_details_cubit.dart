@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:movie_route_app/core/utils/constants.dart';
 import 'package:toastification/toastification.dart';
+
 import '../../../core/models/movie_casts/movie_casts_model.dart';
 import '../../../core/models/movie_details/movie_details_model.dart';
 import '../../../core/models/similar_movies/similar_movie_model.dart';
+import '../../../core/utils/classes.dart';
 import '../../../data/manager/movie_casts_api.dart';
 import '../../../data/manager/movie_details_api.dart';
 import '../../../data/manager/similar_movies_api.dart';
@@ -18,8 +21,7 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
 
   MovieDetailsModel? currentMovie;
   int selectedMovieDetailsTap = 0;
-  // MoviesStack moviesStack = MoviesStack();
-
+  MoviesStack moviesStack = MoviesStack();
 
   List<Crew> currentMovieCasts = [];
   List<SimilarMovie> currentSimilarMovies = [];
@@ -75,13 +77,15 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
 
   void onGetOutFromMovieDetailsPage() {
     resetData();
-    // moviesStack.pop();
-    // currentMovie = moviesStack.peek();
+    moviesStack.pop();
+    currentMovie = moviesStack.peek();
+    if (moviesStack.isEmpty()) {
+      kCarouseSliderMovieAutoPlay = true;
+    }
     emit(InitalMoviesDetailsState());
   }
 
   void resetData() {
-    // playCarouseSliderMovieAuto();
     selectedMovieDetailsTap = 0;
     currentMovie = null;
   }
@@ -108,7 +112,7 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
         movieDetailsFailureNotifcation();
         emit(GetMovieDetailsDataError());
       } else {
-        // moviesStack.push(currentMovie!);
+        moviesStack.push(currentMovie!);
         emit(GetMovieDetailsDataSuccses());
       }
       // emit(MoviesFoundState());
