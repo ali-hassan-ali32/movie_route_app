@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(primarySwatch: kPrimalyColor),
-            title: 'Movies App',
+            title: 'Movies App Route',
             routes: {
               SplashScreen.routeName: (_) => const SplashScreen(),
               LayoutScreen.routeName: (_) => const LayoutScreen(),
