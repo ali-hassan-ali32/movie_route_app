@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:movie_route_app/features/layout/taps/search/manager/bloc/search_states.dart';
+
 import '../../../../../../core/models/searched_movies/searched_movie_model.dart';
 import '../../../../../../core/utils/functions.dart';
-import '../../../../../../data/manager/search_api.dart';
+import '../../../../../../data/manager/apis/search_api.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit(): super(InitalSearchState());

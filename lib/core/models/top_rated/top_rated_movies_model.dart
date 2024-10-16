@@ -1,4 +1,4 @@
-import '../../utils/classes.dart';
+import '../../utils/objects.dart';
 
 class TopRatedMoviesModel {
   TopRatedMoviesModel({

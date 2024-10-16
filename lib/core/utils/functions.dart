@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:toastification/toastification.dart';
 
 import 'constants.dart';
@@ -8,14 +9,18 @@ void failureNotifcation() {
     type: ToastificationType.warning,
     style: ToastificationStyle.fillColored,
     autoCloseDuration: const Duration(seconds: 3),
-    title: const Text(
+    title: Text(
       'No Connection',
       style: TextStyle(
-          color: Colors.white
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 14.sp,
       ),
     ),
-    // you can also use RichText widget for title and description parameters
-    description: const Text('Please Check Internet Connection',style: TextStyle(color: Colors.white),),
+    description: Text(
+      'Please Check Internet Connection',
+      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+    ),
     alignment: Alignment.topRight,
     direction: TextDirection.ltr,
     animationDuration: const Duration(milliseconds: 300),
@@ -25,7 +30,10 @@ void failureNotifcation() {
         child: child,
       );
     },
-    icon: const Icon(Icons.signal_wifi_bad,color: Colors.white,),
+    icon: const Icon(
+      Icons.signal_wifi_bad,
+      color: Colors.white,
+    ),
     primaryColor: Colors.red,
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -52,13 +60,15 @@ void onWatchPress() {
     type: ToastificationType.warning,
     style: ToastificationStyle.fillColored,
     autoCloseDuration: const Duration(seconds: 3),
-    title: const Text(
+    title: Text(
       'Not Available',
       style: TextStyle(
-          color: Colors.white
-      ),
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.sp),
     ),
-    description: const Text('This Feacture is Not Available Yet',style: TextStyle(color: Colors.white),),
+    description: Text(
+      'This Feacture is Not Available Yet',
+      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+    ),
     alignment: Alignment.topRight,
     direction: TextDirection.ltr,
     animationDuration: const Duration(milliseconds: 300),
@@ -68,7 +78,10 @@ void onWatchPress() {
         child: child,
       );
     },
-    icon: const Icon(Icons.warning,color: Colors.white,),
+    icon: const Icon(
+      Icons.warning,
+      color: Colors.white,
+    ),
     primaryColor: kPrimalyColor,
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -96,12 +109,15 @@ void addMovieToWatchListNotifcation({required String movieTitle}) {
     style: ToastificationStyle.fillColored,
     autoCloseDuration: const Duration(seconds: 3),
     title: Text(
-      '$movieTitle Added',
-      style: const TextStyle(color: Colors.white),
+      '$movieTitle Added Successfuly',
+      textAlign: TextAlign.justify,
+      style: TextStyle(
+          color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
     ),
     description: Text(
-      '$movieTitle Added To The Watch List Successfuly',
-      style: const TextStyle(color: Colors.white),
+      '$movieTitle Added To The Watch List',
+      textAlign: TextAlign.justify,
+      style: TextStyle(color: Colors.white, fontSize: 16.sp),
     ),
     alignment: Alignment.topRight,
     direction: TextDirection.ltr,
@@ -144,11 +160,14 @@ void removeMovieToWatchListNotifcation({required String movieTitle}) {
     autoCloseDuration: const Duration(seconds: 3),
     title: Text(
       '$movieTitle Removed Successfuly',
-      style: const TextStyle(color: Colors.white),
+      textAlign: TextAlign.justify,
+      style: TextStyle(
+          color: Colors.white, fontSize: 14.8.sp, fontWeight: FontWeight.bold),
     ),
     description: Text(
       '$movieTitle Removed from The Watch List',
-      style: const TextStyle(color: Colors.white),
+      textAlign: TextAlign.justify,
+      style: TextStyle(color: Colors.white, fontSize: 16.sp),
     ),
     alignment: Alignment.topRight,
     direction: TextDirection.ltr,
@@ -184,7 +203,7 @@ void removeMovieToWatchListNotifcation({required String movieTitle}) {
   );
 }
 
-List<Color> getColorsList(Color baseColor) {
+List<Color> getColorsList({required Color baseColor}) {
   return [
     baseColor,
     baseColor.withOpacity(0.8),

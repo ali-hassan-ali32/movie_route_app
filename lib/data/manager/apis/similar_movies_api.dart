@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/similar_movies/similar_movie_model.dart';
-
+import '../../../core/models/similar_movies/similar_movie_model.dart';
 
 class SimilarMoviesApi {
   

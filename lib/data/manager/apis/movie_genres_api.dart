@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/genres/movie_genres_model.dart';
+import '../../../core/models/genres/movie_genres_model.dart';
+
 class MoviesGenresApi {
 
   static Future<MoviesGenresModel> getMoviesGenres() async {

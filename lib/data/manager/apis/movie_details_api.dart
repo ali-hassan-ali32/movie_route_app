@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../core/models/movie_details/movie_details_model.dart';
+
+import '../../../core/models/movie_details/movie_details_model.dart';
 
 class MovieDetailsApi {
 

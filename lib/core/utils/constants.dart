@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-bool kCarouseSliderMovieAutoPlay = true;
-
 const int _orangePrimaryValue = 0xFFF4B338;
 const MaterialColor kPrimalyColor = MaterialColor(
   _orangePrimaryValue,

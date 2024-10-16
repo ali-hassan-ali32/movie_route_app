@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/popular_movies/popular_movies_model.dart';
+import '../../../core/models/top_rated/top_rated_movies_model.dart';
 
-class PopularMoviesApi {
+class TopRatedMoviesApi {
 
-  static Future<PopularMoviesModel> getPopularMovies() async {
+  static Future<TopRatedMoviesModel> getTopRatedMovies() async {
     Dio dio = Dio();
     try {
       Response response = await dio.get(
-        'https://api.themoviedb.org/3/movie/popular',
+        'https://api.themoviedb.org/3/movie/top_rated',
         options: Options(
           headers: {
             "Authorization":
@@ -16,8 +16,8 @@ class PopularMoviesApi {
           },
         ),
       );
-      PopularMoviesModel popularMoviesModel = PopularMoviesModel.fromJson(response.data);
-      return popularMoviesModel;
+      TopRatedMoviesModel topRatedMoviesModel = TopRatedMoviesModel.fromJson(response.data);
+      return topRatedMoviesModel;
     } on DioException catch (e) {
       final String errorMessage = e.response?.data['status_message'] ?? 'opps there was and error, try later';
       throw Exception(errorMessage);

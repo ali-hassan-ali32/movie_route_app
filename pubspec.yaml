@@ -46,6 +46,7 @@ dependencies:
   animate_do:
   hive:
   path_provider:
+  font_awesome_flutter:
   palette_generator:
   salomon_bottom_bar:
   internet_connection_checker:

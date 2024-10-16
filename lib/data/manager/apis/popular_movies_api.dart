@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/upcoming_movies/upcoming_movies_model.dart';
+import '../../../core/models/popular_movies/popular_movies_model.dart';
 
-class UpcomingMoviesApi {
-  static Future<UpcomingMoviesModel> getUpcomingMovies({int page = 1}) async {
+class PopularMoviesApi {
+
+  static Future<PopularMoviesModel> getPopularMovies() async {
     Dio dio = Dio();
     try {
       Response response = await dio.get(
-        'https://api.themoviedb.org/3/movie/upcoming',
-        queryParameters: {'page': page},
+        'https://api.themoviedb.org/3/movie/popular',
         options: Options(
           headers: {
             "Authorization":
@@ -16,13 +16,13 @@ class UpcomingMoviesApi {
           },
         ),
       );
-      UpcomingMoviesModel upcomingMoviesModel = UpcomingMoviesModel.fromJson(response.data);
-      return upcomingMoviesModel;
+      PopularMoviesModel popularMoviesModel = PopularMoviesModel.fromJson(response.data);
+      return popularMoviesModel;
     } on DioException catch (e) {
-      final String errorMessage = e.response?.data['status_message'] ?? 'Oops, there was an error. Try later.';
+      final String errorMessage = e.response?.data['status_message'] ?? 'opps there was and error, try later';
       throw Exception(errorMessage);
     } catch (e) {
-      throw Exception('Oops, there was an error. Try later.');
+      throw Exception('opps there was and error, try later');
     }
   }
 }

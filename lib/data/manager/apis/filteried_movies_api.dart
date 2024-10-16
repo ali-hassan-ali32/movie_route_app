@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/generes_movies_filter/genres_movies_filter_model.dart';
-
+import '../../../core/models/generes_movies_filter/genres_movies_filter_model.dart';
 
 class FilteredMoviesApi {
 

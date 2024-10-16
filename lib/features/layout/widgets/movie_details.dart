@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
+import 'package:movie_route_app/features/layout/widgets/custom_add_movie_watch_list_bottom.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/utils/classes.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/utils/functions.dart';
+import '../../../core/utils/objects.dart';
 import '../bloc/movie_details_cubit.dart';
 import '../bloc/movie_details_states.dart';
 import '../taps/search/widgets/movie_search_item.dart';
-import 'add_movie_bottom.dart';
 import 'movie_details_tab_bar.dart';
 import 'overview_details.dart';
 
@@ -53,6 +54,7 @@ class MovieDetails extends StatelessWidget {
               onPressed: () {
                 movieDetailsCubit.onGetOutFromMovieDetailsPage();
                 Navigator.pop(context);
+                WatchListCubit.get(context).refreshState();
               },
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,
@@ -179,7 +181,8 @@ class MovieDetails extends StatelessWidget {
                 ],
               ),
             ),
-            CustomAddBottom(movie: movie),
+            CustomAddWatchListMovieBottom(
+                bottomType: AddMovieBottom.movieDetails, movie: movie),
           ],
         ),
         MovieDetailsTabBar(movieDetailsCubit: movieDetailsCubit),

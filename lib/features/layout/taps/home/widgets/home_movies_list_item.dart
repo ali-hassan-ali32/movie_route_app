@@ -1,26 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
+import 'package:movie_route_app/features/layout/widgets/custom_add_movie_watch_list_bottom.dart';
 import 'package:sizer/sizer.dart';
-import 'package:toastification/toastification.dart';
-import '../../../../../core/utils/classes.dart';
+
+import '../../../../../core/utils/objects.dart';
 import '../../../screens/movie_details_screen.dart';
 
-class HomeMoviesListItem extends StatefulWidget {
+class HomeMoviesListItem extends StatelessWidget {
   const HomeMoviesListItem({super.key, required this.movie});
 
   final Movie? movie;
 
   @override
-  State<HomeMoviesListItem> createState() => _HomeMoviesListItemState();
-}
-
-class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
-  @override
   Widget build(BuildContext context) {
-    WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isInSaved = watchListCubit.isMovieSaved(widget.movie!);
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: .5.h),
       width: 30.w,
@@ -29,11 +21,7 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
         children: [
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MovieDetailsPage(movie: widget.movie),
-                  ));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie),));
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
@@ -42,8 +30,8 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                   CachedNetworkImage(
                     height: 21.h,
                     width: 30.w,
-                    imageUrl: widget.movie?.posterPath != null
-                        ? 'https://image.tmdb.org/t/p/w500/${widget.movie!.posterPath}'
+                    imageUrl: movie?.posterPath != null
+                        ? 'https://image.tmdb.org/t/p/w500/${movie!.posterPath}'
                         : '',
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Column(
@@ -67,7 +55,7 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Theme.of(context).primaryColor.withOpacity(0.3),
+                          Colors.black.withOpacity(0.6),
                           // Colors.black.withOpacity(0.6),
                           Colors.transparent,
                         ],
@@ -76,63 +64,21 @@ class _HomeMoviesListItemState extends State<HomeMoviesListItem> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                      onTap: () {
-                        if (isInSaved) {
-                          watchListCubit.deleteSavedMovie(widget.movie!);
-                          watchListCubit.removeMovieFromSavedWatchList(widget.movie);
-                          watchListCubit.removeMovieFromWatchList(widget.movie);
-                          // watchListCubit
-                          //     .removeMovieFromWatchList(widget.movie!);
-                          // watchListCubit.deleteSavedMovie(widget.movie!);
-
-
-                          // watchListCubit.removeMovieFromSavedWatchList(widget.movie!);
-                          toastification.show(
-                            context: context,
-                            // optional if you use ToastificationWrapper
-                            title: const Text('Film has been removed successfuly'),
-                            backgroundColor: Colors.orange,
-                            type: ToastificationType.success,
-                            // style:ToastificationStyle.fillColored,
-                            // animationDuration: Duration(seconds: 2),
-                            autoCloseDuration: const Duration(seconds: 2),
-                          );
-                        } else {
-                          isInSaved=true;
-                          watchListCubit.addMovieToWatchList(widget.movie!);
-                          toastification.show(
-                            context: context,
-                            // optional if you use ToastificationWrapper
-                            title: const Text('Film has been added successfuly'),
-                            backgroundColor: Colors.orange,
-                            type: ToastificationType.success,
-                            // style:ToastificationStyle.fillColored,
-                            // animationDuration: Duration(seconds: 2),
-                            autoCloseDuration: const Duration(seconds: 2),
-                          );
-                        }
-                        setState(() {});
-                      },
-                      child: Image.asset(
-                        "assets/icons/bookmark.png",
-                        color: isInSaved
-                            ? Colors.orange
-                            : Colors.white,
-                      ))
+                  Positioned(
+                      left: -5,
+                      child: CustomAddWatchListMovieBottom(
+                          bottomType: AddMovieBottom.movieItem, movie: movie)),
                 ],
               ),
             ),
           ),
-          SizedBox(
-            height: 1.h,
-          ),
+          SizedBox(height: 1.h,),
           Text(
-            widget.movie?.title ?? 'No Title',
+            movie?.title ?? 'No Title',
             maxLines: 1,
             style: TextStyle(
-              color: Colors.grey,
-              overflow: TextOverflow.ellipsis,
+                color: Colors.grey,
+                overflow: TextOverflow.ellipsis,
               fontSize: 15.sp,
             ),
           )

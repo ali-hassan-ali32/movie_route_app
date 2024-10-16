@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:movie_route_app/core/utils/constants.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../core/models/movie_casts/movie_casts_model.dart';
 import '../../../core/models/movie_details/movie_details_model.dart';
 import '../../../core/models/similar_movies/similar_movie_model.dart';
-import '../../../core/utils/classes.dart';
-import '../../../data/manager/movie_casts_api.dart';
-import '../../../data/manager/movie_details_api.dart';
-import '../../../data/manager/similar_movies_api.dart';
+import '../../../core/utils/objects.dart';
+import '../../../data/manager/apis/movie_casts_api.dart';
+import '../../../data/manager/apis/movie_details_api.dart';
+import '../../../data/manager/apis/similar_movies_api.dart';
 import 'movie_details_states.dart';
 
 class MovieDetailsCubit extends Cubit<MovieDetailsState> {
@@ -26,50 +23,6 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
   List<Crew> currentMovieCasts = [];
   List<SimilarMovie> currentSimilarMovies = [];
 
-
-  void movieDetailsFailureNotifcation() {
-    toastification.show(
-      type: ToastificationType.error,
-      style: ToastificationStyle.fillColored,
-      autoCloseDuration: const Duration(seconds: 5),
-      title: const Text(
-        'Movie Not Found',
-        style: TextStyle(
-            color: Colors.white
-        ),
-      ),
-      description: const Text('The Movie Not Found In Severe',style: TextStyle(color: Colors.white),),
-      alignment: Alignment.topRight,
-      direction: TextDirection.ltr,
-      animationDuration: const Duration(milliseconds: 300),
-      animationBuilder: (context, animation, alignment, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-      icon: const Icon(Icons.warning,color: Colors.white,),
-      primaryColor: Colors.red,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x07000000),
-          blurRadius: 16,
-          offset: Offset(0, 16),
-          spreadRadius: 0,
-        )
-      ],
-      closeButtonShowType: CloseButtonShowType.onHover,
-      closeOnClick: false,
-      pauseOnHover: true,
-      dragToClose: true,
-      showProgressBar: false,
-      applyBlurEffect: true,
-    );
-  }
-
   void onMovieDetailsTapPress(value) {
     selectedMovieDetailsTap = value;
     emit(InitalMoviesDetailsState());
@@ -79,9 +32,6 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     resetData();
     moviesStack.pop();
     currentMovie = moviesStack.peek();
-    if (moviesStack.isEmpty()) {
-      kCarouseSliderMovieAutoPlay = true;
-    }
     emit(InitalMoviesDetailsState());
   }
 
@@ -109,15 +59,12 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
       currentSimilarMovies = moreLikeMoviesModel.results ?? [];
 
       if (currentMovieCasts.isEmpty || currentSimilarMovies.isEmpty) {
-        movieDetailsFailureNotifcation();
         emit(GetMovieDetailsDataError());
       } else {
         moviesStack.push(currentMovie!);
         emit(GetMovieDetailsDataSuccses());
       }
-      // emit(MoviesFoundState());
     } catch (e) {
-      movieDetailsFailureNotifcation();
       emit(GetMovieDetailsDataError());
     }
   }

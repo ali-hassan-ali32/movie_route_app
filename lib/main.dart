@@ -1,24 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:movie_route_app/features/layout/screens/fetch_home_data_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:toastification/toastification.dart';
+
+import 'core/utils/constants.dart';
 import 'features/layout/bloc/movie_details_cubit.dart';
 import 'features/layout/screens/layout_screen.dart';
 import 'features/layout/taps/browse/manager/bloc/browse_cubit.dart';
 import 'features/layout/taps/home/manager/bloc/home_cubit.dart';
 import 'features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
 import 'features/splash/splash_screen.dart';
-import 'package:sizer/sizer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentsDir.path);
+
   runApp(MultiBlocProvider(
     providers: [
-      // BlocProvider(create: (context) => MovieCubit(),),
       BlocProvider(create: (context) => BrowseCubit(),),
       BlocProvider(create: (context) => MovieDetailsCubit(),),
-      BlocProvider(create: (context) => WatchListCubit(),),
-      BlocProvider(create: (context) => HomeCubit()..getHomePageMoviesData(),)
-    ],
+    BlocProvider(create: (context) => WatchListCubit()..getSavedMovies()),
+    BlocProvider(
+      create: (context) => HomeCubit()..getHomePageMoviesData(),
+    )
+  ],
       child: const MyApp()));
 }
 
@@ -32,11 +43,12 @@ class MyApp extends StatelessWidget {
         return ToastificationWrapper(
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(primarySwatch: customOrange),
-            title: 'Movies App',
+            theme: ThemeData(primarySwatch: kPrimalyColor),
+            title: 'Movies App Route',
             routes: {
               SplashScreen.routeName: (_) => const SplashScreen(),
               LayoutScreen.routeName: (_) => const LayoutScreen(),
+              FetchHomeDataScreen.routeName: (_) => const FetchHomeDataScreen(),
             },
             initialRoute: SplashScreen.routeName,
           ),
@@ -45,21 +57,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// This is the app's custom orange color
-const int _orangePrimaryValue = 0xFFF4B338;
-const MaterialColor customOrange = MaterialColor(
-  _orangePrimaryValue,
-  <int, Color>{
-    50: Color(0xFFFFF9E3),
-    100: Color(0xFFFFF1B6),
-    200: Color(0xFFFFE886),
-    300: Color(0xFFFFE05F),
-    400: Color(0xFFFFD63F),
-    500: Color(_orangePrimaryValue),
-    600: Color(0xFFF4A325),
-    700: Color(0xFFF4931E),
-    800: Color(0xFFF37C18),
-    900: Color(0xFFF2690D),
-  },
-);

@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-
-import '../layout/screens/layout_screen.dart';
+import 'package:movie_route_app/core/utils/widgets/custom_bg.dart';
+import 'package:movie_route_app/features/layout/screens/fetch_home_data_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = "/";
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 3),
       () {
         Navigator.pushNamedAndRemoveUntil(
-            context, LayoutScreen.routeName, (route) => false);
+            context, FetchHomeDataScreen.routeName, (route) => false);
       },
     );
     super.initState();
@@ -27,21 +27,23 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xff121312),
-        body: Column(
-          children: [
-            const Spacer(
-              flex: 2,
-            ),
-            ZoomIn(
-                duration: const Duration(seconds: 2),
-                child: Center(child: Image.asset('assets/images/logo.png'))),
-            const Spacer(
-              flex: 1,
-            ),
-            Image.asset('assets/images/secound-logo.png')
-          ],
-        ));
+    return CustomBackground(
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            children: [
+              const Spacer(
+                flex: 2,
+              ),
+              ZoomIn(
+                  duration: const Duration(seconds: 2),
+                  child: Center(child: Image.asset('assets/images/logo.png'))),
+              const Spacer(
+                flex: 1,
+              ),
+              Image.asset('assets/images/secound-logo.png')
+            ],
+          )),
+    );
   }
 }

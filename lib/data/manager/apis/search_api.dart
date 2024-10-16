@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../core/models/searched_movies/searched_movie_model.dart';
+import '../../../core/models/searched_movies/searched_movie_model.dart';
 
 class SearchApi {
 

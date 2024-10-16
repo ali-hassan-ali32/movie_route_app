@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/utils/classes.dart';
+import '../../../core/utils/objects.dart';
 import '../bloc/movie_details_cubit.dart';
 import '../bloc/movie_details_states.dart';
 import '../widgets/custom_loading_widget.dart';

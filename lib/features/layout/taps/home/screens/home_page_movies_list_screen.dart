@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../core/utils/classes.dart';
+import '../../../../../core/utils/objects.dart';
 import '../widgets/home_movies_list_item.dart';
 
 class HomeMoviesListScreen extends StatefulWidget {
@@ -28,6 +28,8 @@ class _HomeMoviesListScreenState extends State<HomeMoviesListScreen> {
           style: TextStyle(color: Colors.grey, fontSize: 18.sp),
         ),
         leading: IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onPressed: () {
               Navigator.pop(context);
             },
