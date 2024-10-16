@@ -1,46 +1,62 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../../../../core/utils/classes.dart';
+import '../../../../../../core/utils/objects.dart';
 
 class CacheHelper {
-  static Future<void> saveFilms(Movie movie) async {
+  static const kMoviesKey = 'SavedFilms';
+
+  static Future<void> deleteMovie(Movie movie) async {
     final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
 
-    final collection = await BoxCollection.open(
-        'Fims', // Name of your database
-        {'SavedFilms'},
-        path: appDocumentsDir.path // Names of your boxes
-        // Path where to store your boxes (Only used in Flutter / Dart IO)
-        );
+    // Open the box directly
+    var box = await Hive.openBox<Map>(kMoviesKey, path: appDocumentsDir.path);
 
-    final catsBox = await collection.openBox<Map>('SavedFilms');
-
-    await catsBox.put("movie", movie.toJson());
-    print(catsBox);
+    await box.delete(movie.id);
   }
 
-  static List<Movie> movies = [];
+  // Save a movie to the local storage
+  static Future<void> saveMovie(Movie movie) async {
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
 
+    // Open the box directly
+    var box = await Hive.openBox<Map>(kMoviesKey, path: appDocumentsDir.path);
+
+    await box.put(movie.id, movie.toJson()); // Use movie ID as the key
+    log("Movie saved: ${movie.title}");
+  }
+
+  // Retrieve all saved movies
   static Future<List<Movie>> getMovies() async {
     final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
 
-    final collection = await BoxCollection.open(
-      'Films', // Name of your database
-      {'SavedFilms'}, // Names of your boxes
-      path: appDocumentsDir
-          .path, // Path where to store your boxes (Only used in Flutter / Dart IO)
-    );
+    // Open the box directly
+    var box = await Hive.openBox<Map>(kMoviesKey, path: appDocumentsDir.path);
 
-    final catsBox = await collection.openBox<Map>('SavedFilms');
+    // Get all values from the box
+    List<Movie> movies = [];
 
-    var json = await catsBox.get("movie");
+    // Iterate over all keys in the box
+    for (var key in box.keys) {
+      var json = box.get(key);
+      if (json != null) {
+        movies.add(Movie.fromJson(json)); // Deserialize and add to list
+      }
+    }
 
-    movies.add(Movie?.fromJson(json));
-    print(movies);
-    print("==============");
     return movies;
+  }
+
+  // Clear all saved films from local storage
+  static Future<void> clearSavedFilms() async {
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+
+    // Open the box directly
+    var box = await Hive.openBox<Map>(kMoviesKey, path: appDocumentsDir.path);
+    await box.clear(); // Clears all entries in the box
+    print("All saved films have been cleared.");
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../core/utils/classes.dart';
+import '../../../../../core/utils/objects.dart';
 import '../screens/home_page_movies_list_screen.dart';
 import 'home_movies_list_item.dart';
 
@@ -14,6 +14,7 @@ class HomeMoviesList extends StatelessWidget {
 
   final String title;
   final List<Movie> movies;
+
   @override
   Widget build(BuildContext context) {
     return Column(

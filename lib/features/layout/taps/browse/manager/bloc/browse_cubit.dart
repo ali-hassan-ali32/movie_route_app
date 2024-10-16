@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../core/models/generes_movies_filter/genres_movies_filter_model.dart';
 import '../../../../../../core/models/genres/movie_genres_model.dart';
 import '../../../../../../core/utils/functions.dart';
-import '../../../../../../data/manager/filteried_movies_api.dart';
-import '../../../../../../data/manager/movie_genres_api.dart';
+import '../../../../../../data/manager/apis/filteried_movies_api.dart';
+import '../../../../../../data/manager/apis/movie_genres_api.dart';
 import 'browse_states.dart';
 
 

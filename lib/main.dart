@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:movie_route_app/features/layout/screens/fetch_home_data_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:toastification/toastification.dart';
@@ -24,11 +25,11 @@ void main() async {
     providers: [
       BlocProvider(create: (context) => BrowseCubit(),),
       BlocProvider(create: (context) => MovieDetailsCubit(),),
+    BlocProvider(create: (context) => WatchListCubit()..getSavedMovies()),
     BlocProvider(
-      create: (context) => WatchListCubit()..getSavedMovies(),
-    ),
-    BlocProvider(create: (context) => HomeCubit()..getHomePageMoviesData(),)
-    ],
+      create: (context) => HomeCubit()..getHomePageMoviesData(),
+    )
+  ],
       child: const MyApp()));
 }
 
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
             routes: {
               SplashScreen.routeName: (_) => const SplashScreen(),
               LayoutScreen.routeName: (_) => const LayoutScreen(),
+              FetchHomeDataScreen.routeName: (_) => const FetchHomeDataScreen(),
             },
             initialRoute: SplashScreen.routeName,
           ),

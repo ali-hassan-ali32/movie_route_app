@@ -1,5 +1,4 @@
-import '../../../data/bloc/cubit.dart';
-import '../../utils/classes.dart';
+import '../../utils/objects.dart';
 
 class GenresMoviesFilterModel {
   GenresMoviesFilterModel({

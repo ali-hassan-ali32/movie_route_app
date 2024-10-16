@@ -9,12 +9,12 @@ import '../../../../../../core/models/movie_details/movie_details_model.dart';
 import '../../../../../../core/models/popular_movies/popular_movies_model.dart';
 import '../../../../../../core/models/top_rated/top_rated_movies_model.dart';
 import '../../../../../../core/models/upcoming_movies/upcoming_movies_model.dart';
-import '../../../../../../core/utils/classes.dart';
 import '../../../../../../core/utils/constants.dart';
-import '../../../../../../data/manager/movie_genres_api.dart';
-import '../../../../../../data/manager/popular_movies_api.dart';
-import '../../../../../../data/manager/top_rated_movies_api.dart';
-import '../../../../../../data/manager/upcoming_movies_api.dart';
+import '../../../../../../core/utils/objects.dart';
+import '../../../../../../data/manager/apis/movie_genres_api.dart';
+import '../../../../../../data/manager/apis/popular_movies_api.dart';
+import '../../../../../../data/manager/apis/top_rated_movies_api.dart';
+import '../../../../../../data/manager/apis/upcoming_movies_api.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -42,16 +42,13 @@ class HomeCubit extends Cubit<HomeState> {
 
     for (String url in imageUrls) {
       try {
-        // Generate the palette from the image URL
         final PaletteGenerator paletteGenerator =
             await PaletteGenerator.fromImageProvider(
           NetworkImage(url),
         );
-        // Add the dominant color to the list
         colors.add(paletteGenerator.dominantColor?.color);
       } catch (e) {
-        // Handle any errors (e.g., network issues, invalid URLs)
-        colors.add(null); // Add null if there's an error
+        colors.add(null);
       }
     }
 
@@ -157,11 +154,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   void onTapPress(value) {
     selectedTap = value;
-    if (value == 0) {
-      kCarouseSliderMovieAutoPlay = true;
-    } else {
-      kCarouseSliderMovieAutoPlay = false;
-    }
     emit(InitalHomeState());
   }
 
@@ -214,31 +206,28 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> getUpcomingMoviesData() async {
-    resetData();  // Reset any previous data
-    emit(GetHomeMoviesDataLoading());  // Emit loading state
+    resetData();
+    emit(GetHomeMoviesDataLoading());
 
     try {
-      // Check for internet connection
       bool isConnected = await InternetConnectionChecker().hasConnection;
       if (!isConnected) {
-        emit(GetHomeMoviesDataError());  // Emit error state if no connection
-        return;  // Exit if no connection
+        emit(GetHomeMoviesDataError());
+        return;
       }
 
-      // Fetch upcoming movies
       UpcomingMoviesModel upcomingMoviesModel = await UpcomingMoviesApi.getUpcomingMovies();
       upcomingMovies = upcomingMoviesModel.upcomingMoviesList ?? [];
 
-      // Check if the list is empty
       if (upcomingMovies.isEmpty) {
         failureNotifcation();
-        emit(GetHomeMoviesDataError());  // Emit error state
+        emit(GetHomeMoviesDataError());
       } else {
-        emit(GetHomeMoviesDataSuccses());  // Emit success state with data
+        emit(GetHomeMoviesDataSuccses());
       }
     } catch (e) {
-      failureNotifcation();  // Notify the user of an error
-      emit(GetHomeMoviesDataError());  // Emit error state
+      failureNotifcation();
+      emit(GetHomeMoviesDataError());
     }
   }
 
@@ -257,8 +246,11 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       bool isConnected = await InternetConnectionChecker().hasConnection;
       if (!isConnected) {
+        failureNotifcation();
         emit(GetHomeMoviesDataError());
+        return;
       }
+
       PopularMoviesModel popularMoviesModel = await PopularMoviesApi.getPopularMovies();
       popularMovies = popularMoviesModel.popularMoviesList ?? [];
       carousSliderMoviesColors = await extractColorsFromImages(

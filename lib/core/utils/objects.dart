@@ -1,6 +1,7 @@
 import '../models/movie_details/movie_details_model.dart';
 
 class Movie {
+  bool isAdded;
   bool? adult;
   String? backdropPath;
   List<num>? genreIds;
@@ -17,6 +18,7 @@ class Movie {
   num? voteCount;
 
   Movie({
+    this.isAdded = false,
     this.adult,
     this.backdropPath,
     this.genreIds,
@@ -35,6 +37,7 @@ class Movie {
 
   factory Movie.fromJson(dynamic json) {
     return Movie(
+      isAdded: false,
       backdropPath: json['backdrop_path'],
       genreIds:
           json['genre_ids'] == null ? null : json['genre_ids'].cast<num>(),
@@ -106,4 +109,10 @@ class MoviesStack {
       pop();
     }
   }
+}
+
+enum AddMovieBottom {
+  carouseSlider,
+  movieDetails,
+  movieItem,
 }

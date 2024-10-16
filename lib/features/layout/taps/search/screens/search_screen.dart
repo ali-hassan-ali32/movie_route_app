@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_route_app/features/layout/widgets/custom_bad_internet_handler.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/utils/constants.dart';
@@ -82,25 +83,9 @@ class SearchScreen extends StatelessWidget {
                   ));
                 }
                 else {
-                  return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.do_not_disturb_alt_rounded,
-                          color: kPrimalyColor,
-                          size: 40.sp,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Opps someting Wrong Happen!, try later',
-                          style: TextStyle(color: Colors.grey, fontSize: 16.5.sp),
-                        ),
-                      ],
-                    ),
-                  );
+                  return CustomBadInternetHandler(
+                      onTryAgainTap: () => searchCubit.getSearchList(
+                          searchQuery: searchCubit.searchQuery));
                 }
               },
             ),

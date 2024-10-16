@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_route_app/features/layout/taps/watchlist/manager/bloc/watch_list_cubit.dart';
+import 'package:movie_route_app/features/layout/widgets/custom_add_movie_watch_list_bottom.dart';
 import 'package:sizer/sizer.dart';
-import 'package:toastification/toastification.dart';
-import '../../../../../core/utils/classes.dart';
+
+import '../../../../../core/utils/objects.dart';
 import '../../../screens/movie_details_screen.dart';
 
 class MovieItem extends StatefulWidget {
@@ -19,8 +19,6 @@ class MovieItem extends StatefulWidget {
 class _MovieItemState extends State<MovieItem> {
   @override
   Widget build(BuildContext context) {
-    WatchListCubit watchListCubit = WatchListCubit.get(context);
-    bool isAdded = watchListCubit.isMovieAdded(widget.movie!);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
@@ -88,43 +86,11 @@ class _MovieItemState extends State<MovieItem> {
                       ),
                     ),
                   ),
-
-                  GestureDetector(
-                      onTap: () {
-                        if (isAdded) {
-                          watchListCubit
-                              .removeMovieFromWatchList(widget.movie!);
-                          toastification.show(
-                            context: context,
-                            // optional if you use ToastificationWrapper
-                            title: Text('Film has been removed successfuly'),
-                            backgroundColor: Colors.orange,
-                            type: ToastificationType.success,
-                            // style:ToastificationStyle.fillColored,
-                            // animationDuration: Duration(seconds: 2),
-                            autoCloseDuration: const Duration(seconds: 2),
-                          );
-                        } else {
-                          watchListCubit.addMovieToWatchList(widget.movie!);
-                          toastification.show(
-                            context: context,
-                            // optional if you use ToastificationWrapper
-                            title: Text('Film has been added successfuly'),
-                            backgroundColor: Colors.orange,
-                            type: ToastificationType.success,
-                            // style:ToastificationStyle.fillColored,
-                            // animationDuration: Duration(seconds: 2),
-                            autoCloseDuration: const Duration(seconds: 2),
-                          );
-                        }
-                        setState(() {
-
-                        });
-                      },
-                      child: Image.asset(
-                        "assets/icons/bookmark.png",
-                        color: isAdded ? Colors.orange : Colors.white,
-                      ))
+                  Positioned(
+                      left: -5,
+                      child: CustomAddWatchListMovieBottom(
+                          bottomType: AddMovieBottom.movieItem,
+                          movie: widget.movie)),
                 ],
               ),
             ),

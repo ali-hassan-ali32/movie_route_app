@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_route_app/features/layout/taps/home/widgets/home_movie_add_bottom.dart';
+import 'package:movie_route_app/features/layout/widgets/custom_add_movie_watch_list_bottom.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../core/utils/classes.dart';
+import '../../../../../core/utils/objects.dart';
 import '../../../screens/movie_details_screen.dart';
 
 class HomeMoviesListItem extends StatelessWidget {
@@ -64,7 +64,10 @@ class HomeMoviesListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(left: -5, child: HomeMovieAddBottom(movie: movie)),
+                  Positioned(
+                      left: -5,
+                      child: CustomAddWatchListMovieBottom(
+                          bottomType: AddMovieBottom.movieItem, movie: movie)),
                 ],
               ),
             ),
