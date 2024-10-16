@@ -37,7 +37,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             currentIndex: HomeCubit.get(context).selectedTap,
             onTap: (value) {
               HomeCubit.get(context).onTapPress(value);
-              CacheHelper.getMovies();
+              // CacheHelper.getMovies();
             },
             items: [
               SalomonBottomBarItem(
